@@ -9,10 +9,12 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const app = express();
 const expressLayouts = require('express-ejs-layouts');
-
+const bodyParser = require('body-parser');
 
 // set up the routes
 const indexRouter = require('./routes/index');
+const authorRouter = require('./routes/authors');
+
 
 // set up view engine - ejs
 app.set('view engine', 'ejs');
@@ -25,6 +27,9 @@ app.use(expressLayouts);
 // set the public folder
 app.use(express.static('public'));
 
+// use body parser
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: false }));
+
 // import mongoose
 const mongoose = require('mongoose');
 // connect to the database
@@ -36,6 +41,9 @@ db.once('open', () => console.log('Connected to Mongoose'));
 
 // use route
 app.use('/', indexRouter);
+app.use('/authors', authorRouter);
+'authors/new'
+
 
 // listen to a unknown port or default to the port 3000
 app.listen(process.env.PORT || 3000);
